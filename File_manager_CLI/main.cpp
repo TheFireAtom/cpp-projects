@@ -11,6 +11,8 @@
 #include <clocale>
 #include <windows.h>
 
+namespace fs = std::filesystem;
+
 void russianLang() {
 	setlocale(LC_ALL, "Russian");
 	SetConsoleCP(1251);
@@ -18,13 +20,14 @@ void russianLang() {
 }
 
 bool exitFromFileManager = false;
+fs::path currentDirectory = fs::current_path();
 
 std::map<std::string, std::string> allCommands = {
 {"exit", "\t Выход из файлового менеджера"}, 
 {"help", "\t Список команд с пояснениями"}
 };
 
-void checkUserInput(std::string opt) {
+void checkUserInput(std::string opt, std::string arg) {
 	if (opt == "help") {
 		std::cout << "Для получения сведений об определённой команде введите HELP <имя команды> " << std::endl;
 		for (const auto& [command, description] : allCommands) {
@@ -32,6 +35,12 @@ void checkUserInput(std::string opt) {
 		}
 	} else if (opt == "exit") {
 		exitFromFileManager = true;
+	} else if (opt == "cd" && arg == "../") {
+		std::cout << "Something in the way\n"; 
+	}
+
+	else { 
+		std::cout << "Неизвестная команда. Попробуйте ещё раз.\n";
 	}
 }
 
@@ -39,10 +48,18 @@ int main() {
 	russianLang();
 
 	std::string userInput;
+	std::string userCommand;
+	std::string userArgument;
 
 	while(!exitFromFileManager) {
-		std::cin >> userInput;
-		checkUserInput(userInput);
+		std::cout << currentDirectory.string() << ">";
+		
+		std::getline(std::cin, userInput);
+		std::istringstream stream(userInput);
+		stream >> userCommand;
+		std::getline(stream >> std::ws, userArgument);
+		
+		checkUserInput(userCommand, userArgument);
 	}
 
 	return 0;
