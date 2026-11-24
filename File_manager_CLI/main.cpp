@@ -1,11 +1,12 @@
 // Основные используемые библиотеки:
+#include <cctype>
 #include <iostream>
 #include <string>
 #include <map>
 #include <sstream>
 #include <filesystem>
 #include <functional>
-
+#include <algorithm>
 // Библиотеки для подключения русского языка:
 #include <clocale>
 #include <windows.h>
@@ -35,7 +36,6 @@ std::map<const std::string, const std::string> allCommands = {
 	{"rmdir", "\t Удалить пустую папку"}
 };
 
-
 std::map<std::string, std::function<void(std::string, std::string)>> allOptions = {
 	{"help", getHelp},
 	{"exit", exitProgram},
@@ -63,6 +63,7 @@ void changeDirectory(const std::string& opt, const std::string& arg) {
   	  	  if (target.is_absolute()) {
   	  	  	newPath = target;
   	  	  } else {
+  	  	  	std::cout << "Target: " << target << std::endl;
   	  	  	newPath = currentDirectory / target;
   	  	  }
 
@@ -132,6 +133,17 @@ int main() {
 		}
 
 		std::getline(stream >> std::ws, userArgument);
+
+		// if (userArgument == ".. /" || userArgument == ". ./" || userArgument == " ../") {
+		// 	userArgument.erase(
+		// 		std::remove_if(userArgument.begin(), userArgument.end(), [](unsigned char c) {
+		// 			return std::isspace(c);
+		// 	}),
+		// 		userArgument.end()
+		// 	);
+		// }
+
+		// std::cout << userArgument;
 		
 		checkUserInput(userCommand, userArgument);
 	}
