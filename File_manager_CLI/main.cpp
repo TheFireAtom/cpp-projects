@@ -63,7 +63,7 @@ void changeDirectory(const std::string& opt, const std::string& arg) {
   	  	  if (target.is_absolute()) {
   	  	  	newPath = target;
   	  	  } else {
-  	  	  	std::cout << "Target: " << target << std::endl;
+  	  	  	// std::cout << "Target: " << target << std::endl;
   	  	  	newPath = currentDirectory / target;
   	  	  }
 
@@ -134,14 +134,16 @@ int main() {
 
 		std::getline(stream >> std::ws, userArgument);
 
-		// if (userArgument == ".. /" || userArgument == ". ./" || userArgument == " ../") {
-		// 	userArgument.erase(
-		// 		std::remove_if(userArgument.begin(), userArgument.end(), [](unsigned char c) {
-		// 			return std::isspace(c);
-		// 	}),
-		// 		userArgument.end()
-		// 	);
-		// }
+		if (userArgument == ".. /" || userArgument == ". ./" || userArgument == " ../") {
+			// userArgument.erase(
+			// 	std::remove_if(userArgument.begin(), userArgument.end(), [](unsigned char c) {
+			// 		return std::isspace(c);
+			// }),
+			// 	userArgument.end()
+			// );
+
+			std::cout << "Ошибка: данной команды не существует\n";
+		}
 
 		// std::cout << userArgument;
 		
